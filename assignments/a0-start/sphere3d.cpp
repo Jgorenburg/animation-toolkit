@@ -11,10 +11,28 @@ class Sphere3D : public atkui::Framework {
     // colors are RGB triplets in range [0,1]
     setColor(vec3(0,1,0));
 
-    // draw a sphere at center of the world
+    pos = pos + vel;
+
+    // draw a sphere at pos
     float radius = 50.0;
-    drawSphere(vec3(0), radius);
+    drawSphere(pos, radius);
   }
+
+  void keyUp(int key, int mods) {
+      if (key == GLFW_KEY_SPACE) {
+          vel = agl::randomUnitVector();
+      }
+      else if (key == GLFW_KEY_R) {
+          vel = vec3{0.0f};
+          pos = vec3{0.0f};
+
+      }
+  }
+
+protected:
+    vec3 vel{ 0.0f };
+    vec3 pos{ 0.0f };
+
 };
 
 int main(int argc, char** argv)
