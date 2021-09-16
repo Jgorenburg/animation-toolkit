@@ -13,9 +13,25 @@ class Look : public atkui::Framework {
   }
 
   virtual void scene() {
-    vec3 target = vec3(_mouseX, _mouseY, 0);
+    vec3 target = vec3(_mouseX, _mouseY, 190);
     setColor(vec3(1,0,0));
-    drawSphere(target, 5);
+    drawSphere(target, 10);
+
+    setColor(vec3(1));
+
+    double x = width() / 6;
+    double y = height() / 2;
+    double radius = 170;
+
+    drawSphere(vec3(2 * x, y, 0), radius);
+    drawSphere(vec3(4 * x, y, 0), radius);
+
+    setColor(vec3(0));
+
+    radius = 35;
+    
+    drawSphere(vec3(2 * x, y, 180), radius);
+    drawSphere(vec3(4 * x, y, 180), radius);
   }
 
   void mouseMove(int x, int y) {
