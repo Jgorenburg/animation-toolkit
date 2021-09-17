@@ -1,10 +1,3 @@
-# Sphere2D
-![](/images/sphere2d.png)
-
-# Sphere3D
-
-![](/images/sphere3d.gif)
-
 # Animation Toolkit
 
 Repository for animation demos and tools

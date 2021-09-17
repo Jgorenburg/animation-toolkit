@@ -2,14 +2,12 @@
 
 ## Sphere2D
 
-TODO: Replace this text with results
+![](/images/sphere2d.png)
 
-* images, gifs, videos
-* brief description of what each image/gif/video shows
+Image of a red sphere behind a green sphere
 
 ## Sphere3D
 
-TODO: Replace this text with results
+![](/images/sphere3d.gif)
 
-* images, gifs, videos
-* brief description of what each image/gif/video shows
+Gif of a sphere that moves randomly based on 3 dimensional vector
