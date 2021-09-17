@@ -28,9 +28,15 @@ class Look : public atkui::Framework {
     drawSphere(vec3(2 * x, y, 0), radius);
     drawSphere(vec3(4 * x, y, 0), radius);
 
-    dirEye1 = normalize(vec3(_mouseX, _mouseY, 0) - vec3(2 * x, y, 0));
-    dirEye2 = normalize(vec3(_mouseX, _mouseY, 0) - vec3(4 * x, y, 0));
+    dirEye1 = (vec3(_mouseX, _mouseY, 0) - vec3(2 * x, y, 0)) / (width() / 4);
+    dirEye2 = (vec3(_mouseX, _mouseY, 0) - vec3(4 * x, y, 0)) / (width() / 4);
 
+    if (length(dirEye1) > 1) {
+        dirEye1 = normalize(dirEye1);
+    }
+    if (length(dirEye2) > 1) {
+        dirEye2 = normalize(dirEye2);
+    }
    // if (length(dirEye1) > 1) {
      // dirEye1 = normalize(dirEye1);
     //}

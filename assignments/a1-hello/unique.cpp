@@ -19,7 +19,7 @@ class Unique : public atkui::Framework {
     for(int i = 0; i < numParticles; i++){
         particles[i].color = agl::randomUnitCube() / 2.0f + vec3(0.5f);
         particles[i].pos = agl::randomUnitCube() * vec3(width(), height(), 0) + vec3(width() / 2, height() / 2, i);
-        particles[i].vel = agl::randomUnitCube() * vec3(width() / 40, height() / 40, 0);
+        particles[i].vel = agl::randomUnitCube() * vec3(width() / 300, height() / 300, 0);
     }
   }
 
@@ -64,12 +64,11 @@ class Unique : public atkui::Framework {
     for (int i = 0; i < 16; i++) {
       vec3 avColor(0);
       float size = grid[i].size();
-      std::cout << size << std::endl;
       for (int j = 0; j < size; j++) {
         avColor = avColor + grid[i][j]->color / size;
       }
       for (int k = 0; k < size; k++) {
-        grid[i][k]->color = grid[i][k]->color * 9.0f / 10.0f + avColor / 10.0f;
+        grid[i][k]->color = grid[i][k]->color * 9.9f / 10.0f + avColor / 100.0f;
       }
     }
 

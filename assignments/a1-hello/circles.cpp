@@ -24,7 +24,9 @@ public:
    }
 
    virtual void scene() {
-      jitter += M_PI / 360;
+      double time = elapsedTime();
+      jitter += M_PI / 18 * (time - lastTime);
+      lastTime = time;
       for (int i = 0; i < 10; i++){
          setColor(rings[i].color);
          int dir = 1;
@@ -39,6 +41,7 @@ public:
 protected:
    group rings [10];
    double jitter = 0;
+   double lastTime = 0;
 };
 
 int main(int argc, char** argv)

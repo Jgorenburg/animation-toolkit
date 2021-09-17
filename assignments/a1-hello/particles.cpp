@@ -20,14 +20,13 @@ class Particles : public atkui::Framework
     for(int i = 0; i < numParticles; i++){
         particles[i].color = agl::randomUnitCube() / 2.0f + vec3(0.5f);
         particles[i].pos = agl::randomUnitCube() * vec3(width(), height(), 0) + vec3(width() / 2, height() / 2, i);
-        particles[i].vel = agl::randomUnitCube() * vec3(width() / 40, height() / 40, 0);
+        particles[i].vel = agl::randomUnitCube() * vec3(width() / 300, height() / 300, 0);
     }
   }
 
   virtual void scene() {
     for(int i = 0; i < numParticles; i++){
       setColor(particles[i].color);
-     
       particles[i].pos += particles[i].vel;
       if (particles[i].pos.x > width() || particles[i].pos.x < 0){
         particles[i].pos.x =  abs(abs(particles[i].pos.x) - width()); 
@@ -41,6 +40,7 @@ class Particles : public atkui::Framework
 
  protected:
   particle particles [100];
+  double lastTime = 0;
 };
 
 int main(int argc, char** argv) {
