@@ -16,7 +16,7 @@ Uses a tangent function to point the eyes towards the red circle
 
 ![](/assignments/a1-hello/Images/Particles.gif)
 
-Particles of random colors move in random directions at random velocities
+Particles of random colors move in the same direction at random speeds
 
 ## Circle
 
