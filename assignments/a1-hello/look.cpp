@@ -21,22 +21,29 @@ class Look : public atkui::Framework {
 
     setColor(vec3(1));
 
-    double x = width() / 6;
-    double y = height() / 2;
+    float x = width() / 6;
+    float y = height() / 2;
     double radius = 170;
 
     drawSphere(vec3(2 * x, y, 0), radius);
     drawSphere(vec3(4 * x, y, 0), radius);
 
-    dirEye1 = (vec3(_mouseX, _mouseY, 0) - vec3(2 * x, y, 0)) / (width() / 4);
-    dirEye2 = (vec3(_mouseX, _mouseY, 0) - vec3(4 * x, y, 0)) / (width() / 4);
+   // dirEye1 = (vec3(_mouseX, _mouseY, 0) - vec3(2 * x, y, 0)) / (width() / 4);
+    //dirEye2 = (vec3(_mouseX, _mouseY, 0) - vec3(4 * x, y, 0)) / (width() / 4);
 
-    if (length(dirEye1) > 1) {
+    float difX = float(_mouseX) - 2.0f * x;
+    float difY = float(_mouseY) - y;
+    dirEye1 = atan2(difY, difX);
+
+    difX = _mouseX - 4.0f * x;
+    dirEye2 = atan2(difY, difX);
+
+    /*if (length(dirEye1) > 1) {
         dirEye1 = normalize(dirEye1);
     }
     if (length(dirEye2) > 1) {
         dirEye2 = normalize(dirEye2);
-    }
+    }*/
    // if (length(dirEye1) > 1) {
      // dirEye1 = normalize(dirEye1);
     //}
@@ -45,8 +52,8 @@ class Look : public atkui::Framework {
 
     radius = 35;
     
-    drawSphere(vec3(2 * x, y, 180) + 40.0f * dirEye1, radius);
-    drawSphere(vec3(4 * x, y, 180) + 40.0f * dirEye2, radius);
+    drawSphere(vec3(2 * x, y, 180) + 40.0f * vec3(cos(dirEye1), sin(dirEye1), 0), radius);
+    drawSphere(vec3(4 * x, y, 180) + 40.0f * vec3(cos(dirEye2), sin(dirEye2), 0), radius);
 
     //mouseIsDown()
   }
@@ -59,8 +66,8 @@ class Look : public atkui::Framework {
  private:
   int _mouseX;
   int _mouseY;
-  vec3 dirEye1;
-  vec3 dirEye2;
+  float dirEye1;
+  float dirEye2;
 };
 
 int main(int argc, char** argv) {
