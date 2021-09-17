@@ -17,7 +17,6 @@ class Particles : public atkui::Framework
   }
 
   virtual void setup() {
-      vec3 waste = agl::randomUnitCube();
     velocity = agl::randomUnitVector() * vec3(1, 1, 0);
     std::cout << velocity;
     for(int i = 0; i < numParticles; i++){
