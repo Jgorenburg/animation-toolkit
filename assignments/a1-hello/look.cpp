@@ -13,6 +13,8 @@ class Look : public atkui::Framework {
   }
 
   virtual void scene() {
+    
+
     vec3 target = vec3(_mouseX, _mouseY, 190);
     setColor(vec3(1,0,0));
     drawSphere(target, 10);
@@ -26,15 +28,24 @@ class Look : public atkui::Framework {
     drawSphere(vec3(2 * x, y, 0), radius);
     drawSphere(vec3(4 * x, y, 0), radius);
 
+    dirEye1 = normalize(vec3(_mouseX, _mouseY, 0) - vec3(2 * x, y, 0));
+    dirEye2 = normalize(vec3(_mouseX, _mouseY, 0) - vec3(4 * x, y, 0));
+
+   // if (length(dirEye1) > 1) {
+     // dirEye1 = normalize(dirEye1);
+    //}
+
     setColor(vec3(0));
 
     radius = 35;
     
-    drawSphere(vec3(2 * x, y, 180), radius);
-    drawSphere(vec3(4 * x, y, 180), radius);
+    drawSphere(vec3(2 * x, y, 180) + 40.0f * dirEye1, radius);
+    drawSphere(vec3(4 * x, y, 180) + 40.0f * dirEye2, radius);
+
+    //mouseIsDown()
   }
 
-  void mouseMove(int x, int y) {
+  void mouseMotion(int x, int y, int dx, int dy) {
     _mouseX = x;
     _mouseY = height() - y;
   }
@@ -42,6 +53,8 @@ class Look : public atkui::Framework {
  private:
   int _mouseX;
   int _mouseY;
+  vec3 dirEye1;
+  vec3 dirEye2;
 };
 
 int main(int argc, char** argv) {

@@ -21,8 +21,8 @@ static void error_callback(int error, const char* description) {
 }
 
 Window::Window() :
-  _windowWidth(500),
-  _windowHeight(500),
+  _windowWidth(750),
+  _windowHeight(750),
   _backgroundColor(0.0f),
   _elapsedTime(0.0),
   _cameraEnabled(true),
