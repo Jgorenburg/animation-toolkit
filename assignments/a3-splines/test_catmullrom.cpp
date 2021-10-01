@@ -6,9 +6,9 @@ using namespace glm;
 int main()
 {
    std::vector<vec3> keys;
-   keys.push_back(vec3(0,0,0));
-   keys.push_back(vec3(1,1,0));
-   keys.push_back(vec3(2,0,0));
+   keys.push_back(vec3(0, 0, 0));
+   keys.push_back(vec3(1, 1, 0));
+   keys.push_back(vec3(3, 1, 0));
 
    InterpolatorCatmullRom interp;
    interp.computeControlPoints(keys);
@@ -28,4 +28,3 @@ int main()
    value = interp.interpolate(1, 0.5);
    std::cout << "interpolate(1, 0.5) = " << to_string(value) << std::endl;
 }
-

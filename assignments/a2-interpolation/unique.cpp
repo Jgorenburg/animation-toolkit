@@ -62,13 +62,13 @@ public:
    }
 
    // makes a new curve with unique control points and number of children
-   void makeNewBez(vec3 initPos, int parent)
+   void makeNewBez(vec3 initPos, int parent, vec3 color)
    {
       resetBounds();
       // the first point is always on the curve that spawned this curve
       ybound[0] = vec2(initPos[1], initPos[1]);
       xbound[0] = vec2(initPos[0], initPos[0]);
-      listOfBez.push_back(makePoints(xbound, ybound, listOfBez[parent][4]));
+      listOfBez.push_back(makePoints(xbound, ybound, color));
       times.push_back(0.0f);
       numChildren.push_back(fmod(random(), 3));
    }
@@ -121,11 +121,11 @@ public:
       {
          return agl::randomUnitCube() + vec3(0.5f);
       }
-      /* else
-          {
-         return startColor;
-      } */
       else
+      {
+         return startColor;
+      }
+      /*else
       {
          vec3 jitter = agl::randomUnitCube() / 1.5f + startColor;
          for (int i = 0; i < 3; i++)
@@ -141,7 +141,7 @@ public:
          }
 
          return jitter;
-      }
+      }*/
    }
 
    // uses casteljau's algorithm to draw a curve up until time t
@@ -160,7 +160,7 @@ public:
       if (times[curve] * (numChildren[curve] + 1.0f) >= 1.0f)
       {
          numChildren[curve]--;
-         makeNewBez(prevPos, curve);
+         makeNewBez(prevPos, curve, lerp(listOfBez[curve][4], listOfBez[curve][5], times[curve]));
       }
    }
 

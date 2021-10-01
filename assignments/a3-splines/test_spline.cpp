@@ -7,12 +7,13 @@
 
 using namespace glm;
 
-int main() {
+int main()
+{
    InterpolatorLinear linear;
    InterpolatorCatmullRom catmullrom;
    InterpolatorHermite hermite;
    hermite.setClamped(true);
-   hermite.setClampedDirection(vec3(1,0,0));
+   hermite.setClampedDirection(vec3(1, 0, 0));
 
    Spline spline;
    spline.addInterpolationType("Linear", &linear);
@@ -54,7 +55,7 @@ int main() {
    std::cout << "getValue(1): " << to_string(test) << std::endl;
 
    // test with 3 values (with different interpolators)
-   spline.appendKey(2, vec3(2,0,0));
+   spline.appendKey(2, vec3(2, 0, 0));
    std::cout << "\n-------------------------------\n";
    test = spline.getValue(1.5);
    std::cout << "Current interpolation type: " << spline.getInterpolationType() << std::endl;
@@ -70,7 +71,7 @@ int main() {
    std::cout << "Duration: " << spline.getDuration() << std::endl;
    std::cout << "getValue(1.5): " << to_string(test) << std::endl;
 
-   spline.setInterpolationType("Hermite");
+      spline.setInterpolationType("Hermite");
    test = spline.getValue(1.5);
    std::cout << "\n-------------------------------\n";
    std::cout << "Current interpolation type: " << spline.getInterpolationType() << std::endl;
@@ -101,4 +102,3 @@ int main() {
    std::cout << "Duration: " << duration << std::endl;
    std::cout << "getValue(1.5): " << to_string(test) << std::endl;
 }
-

@@ -4,57 +4,112 @@
 #include <algorithm>
 using glm::vec3;
 
-CurveEditor::CurveEditor() : 
-  atkui::Framework(atkui::Orthographic), 
-  mSpline(),
-  mRadius(10.0),
-  mSelected(-1),
-  mButtonState(0),
-  mMode(ADD), 
-  mShowControlPoints(false) {
+CurveEditor::CurveEditor() : atkui::Framework(atkui::Orthographic),
+                             mSpline(),
+                             mRadius(10.0),
+                             mSelected(-1),
+                             mButtonState(0),
+                             mMode(ADD),
+                             mShowControlPoints(false)
+{
 
   mSpline.addInterpolationType("Linear", &mLinear);
   mSpline.addInterpolationType("Hermite", &mHermite);
   mSpline.addInterpolationType("Catmull-Rom", &mCatmullRom);
 
   mHermite.setClamped(true);
-  mHermite.setClampedDirection(vec3(100,0,0));
+  mHermite.setClampedDirection(vec3(100, 0, 0));
 }
 
-CurveEditor::~CurveEditor() {
+CurveEditor::~CurveEditor()
+{
 }
 
-void CurveEditor::setup() {
+void CurveEditor::setup()
+{
   listControls();
 }
 
-void CurveEditor::scene() {
+void CurveEditor::scene()
+{
   drawState();
   // todo: your code here
+
+  if (mSpline.getInterpolationType() == "Linear")
+  {
+    setColor(vec3(0, 0, 1));
+  }
+  else if (mSpline.getInterpolationType() == "Catmull-Rom")
+  {
+    setColor(vec3(1, 0, 0));
+  }
+  else if (mSpline.getInterpolationType() == "Hermite")
+  {
+    setColor(vec3(0, 1, 0));
+  }
+  else
+  {
+    setColor(vec3(1, 0, 1));
+  }
+
+  if (mShowControlPoints)
+  {
+    for (int i = 0; i < mSpline.getNumControlPoints(); i++)
+    {
+      drawSphere(mSpline.getControlPoint(i), 10);
+    }
+  }
+
+  if (mSpline.getNumControlPoints() > 0)
+  {
+    float minT = mSpline.getTime(0);
+    float dur = mSpline.getDuration();
+    prevVal = mSpline.getValue(0);
+
+    for (int i = minT; i < minT + dur; i += 0.01f)
+    {
+      std::cout << i << std::endl;
+      vec3 newVal = mSpline.getValue(i);
+      drawLine(newVal, prevVal);
+      prevVal = newVal;
+    }
+  }
 }
 
-void CurveEditor::addPoint(const vec3& p) {
+void CurveEditor::addPoint(const vec3 &p)
+{
   //std::cout << "Add key: " << p << std::endl;
   mSpline.appendKey(mSpline.getNumKeys(), p);
 }
 
-void CurveEditor::deletePoint(int key) {
-  if (mShowControlPoints) return;
+void CurveEditor::deletePoint(int key)
+{
+  if (mShowControlPoints)
+    return;
   mSpline.deleteKey(key);
 }
 
-void CurveEditor::drawState() {
+void CurveEditor::drawState()
+{
   int th = 25;
-  switch (mMode) {
-    case ADD: drawText("Mode: ADD", 5, th); break;
-    case EDIT: drawText("Mode: EDIT", 5, th); break;
-    case REMOVE: drawText("Mode: DELETE", 5, th); break;
+  switch (mMode)
+  {
+  case ADD:
+    drawText("Mode: ADD", 5, th);
+    break;
+  case EDIT:
+    drawText("Mode: EDIT", 5, th);
+    break;
+  case REMOVE:
+    drawText("Mode: DELETE", 5, th);
+    break;
   }
-  th += renderer.textHeight() + 5; 
-  drawText("Type: "+mSpline.getInterpolationType(), 5, th); 
+  th += renderer.textHeight() + 5;
+  drawText("Type: " + mSpline.getInterpolationType(), 5, th);
 }
 
-void CurveEditor::listControls() {
+void CurveEditor::listControls()
+{
 
   std::cout << "Key controls:" << std::endl;
   std::cout << "0: Linear" << std::endl;
@@ -68,44 +123,61 @@ void CurveEditor::listControls() {
   std::cout << "SPACEBAR: clear" << std::endl;
 }
 
-void CurveEditor::mouseMotion(int pX, int pY, int dx, int dy) {
-  if (mMode != EDIT) return;
-  if (mSelected == -1) return;
-  
-  if (mButtonState == GLFW_MOUSE_BUTTON_LEFT) {
+void CurveEditor::mouseMotion(int pX, int pY, int dx, int dy)
+{
+  if (mMode != EDIT)
+    return;
+  if (mSelected == -1)
+    return;
+
+  if (mButtonState == GLFW_MOUSE_BUTTON_LEFT)
+  {
     vec3 p = vec3(pX, height() - pY, 0);
-    if (mShowControlPoints) {
-      if (mSpline.getInterpolationType() == "Hermite" && mSelected % 2 == 1) {
-        mSpline.editControlPoint(mSelected, p-mSpline.getControlPoint(mSelected-1));
-      } else {
+    if (mShowControlPoints)
+    {
+      if (mSpline.getInterpolationType() == "Hermite" && mSelected % 2 == 1)
+      {
+        mSpline.editControlPoint(mSelected, p - mSpline.getControlPoint(mSelected - 1));
+      }
+      else
+      {
         mSpline.editControlPoint(mSelected, p);
       }
     }
-    else mSpline.editKey(mSelected, p);
+    else
+      mSpline.editKey(mSelected, p);
   }
 }
 
-int CurveEditor::pickPoint(int x, int y) {
+int CurveEditor::pickPoint(int x, int y)
+{
   vec3 tmp = vec3(x, y, 0);
 
   int num = mSpline.getNumKeys();
-  if (mShowControlPoints) {
+  if (mShowControlPoints)
+  {
     num = mSpline.getNumControlPoints();
   }
 
   // check data points -- needs to be done before ctrl points
-  for (int i = 0; mSelected == -1 && i < num; i++) {
+  for (int i = 0; mSelected == -1 && i < num; i++)
+  {
     vec3 pt;
-    if (mShowControlPoints) {
+    if (mShowControlPoints)
+    {
       pt = mSpline.getControlPoint(i);
-      if (mSpline.getInterpolationType() == "Hermite" && i % 2 == 1) {
-        pt = pt + mSpline.getControlPoint(i-1);
+      if (mSpline.getInterpolationType() == "Hermite" && i % 2 == 1)
+      {
+        pt = pt + mSpline.getControlPoint(i - 1);
       }
-    } else {
+    }
+    else
+    {
       pt = mSpline.getKey(i);
     }
 
-    if (length(tmp - pt) < mRadius) {
+    if (length(tmp - pt) < mRadius)
+    {
       return i;
     }
   }
@@ -113,84 +185,106 @@ int CurveEditor::pickPoint(int x, int y) {
   return -1;
 }
 
-void CurveEditor::mouseUp(int pButton, int state) {
-  if (mButtonState == GLFW_MOUSE_BUTTON_LEFT) {
+void CurveEditor::mouseUp(int pButton, int state)
+{
+  if (mButtonState == GLFW_MOUSE_BUTTON_LEFT)
+  {
     mSelected = -1;
   }
 }
 
-void CurveEditor::mouseDown(int pButton, int state) {
+void CurveEditor::mouseDown(int pButton, int state)
+{
   mButtonState = pButton;
   glm::vec2 p = mousePosition();
-  int pX = (int) p.x;
-  int pY = (int) p.y;
+  int pX = (int)p.x;
+  int pY = (int)p.y;
 
-  if (mButtonState == GLFW_MOUSE_BUTTON_LEFT) {
-    if (mMode == ADD) {
+  if (mButtonState == GLFW_MOUSE_BUTTON_LEFT)
+  {
+    if (mMode == ADD)
+    {
       vec3 tmp(p, 0);
       // guard against adding multiple copies of the same point
       // (multiple mouse events may be triggered for the same point)
       bool add = true;
-      if (mSpline.getNumKeys() > 0) {
+      if (mSpline.getNumKeys() > 0)
+      {
         vec3 lastKey = mSpline.getKey(mSpline.getNumKeys() - 1);
-        float d = length(lastKey-tmp);
-        if (d < 10) add = false;
+        float d = length(lastKey - tmp);
+        if (d < 10)
+          add = false;
       }
 
-      if (add) {
-        addPoint(vec3(pX, height()-pY, 0));
+      if (add)
+      {
+        addPoint(vec3(pX, height() - pY, 0));
       }
-
-    } else if (mMode == REMOVE) {
+    }
+    else if (mMode == REMOVE)
+    {
       mSelected = pickPoint(pX, height() - pY);
       deletePoint(mSelected);
-
-    } else if (mMode == EDIT) {
+    }
+    else if (mMode == EDIT)
+    {
       mSelected = pickPoint(pX, height() - pY);
       std::cout << "SELECTED: " << mSelected << std::endl;
       mouseMotion(pX, pY, 0, 0);
     }
   }
-
 }
 
-void CurveEditor::keyUp(int pKey, int mods) {
-  if (pKey == 'p') {
-    for (int i = 0; i < mSpline.getNumKeys(); i++) {
+void CurveEditor::keyUp(int pKey, int mods)
+{
+  if (pKey == 'p')
+  {
+    for (int i = 0; i < mSpline.getNumKeys(); i++)
+    {
       std::cout << mSpline.getKey(i) << std::endl;
     }
-  } else if (pKey == '1') {
+  }
+  else if (pKey == '1')
+  {
     mSpline.setInterpolationType("Linear");
-
-  } else if (pKey == '2') {
+  }
+  else if (pKey == '2')
+  {
     mSpline.setInterpolationType("Catmull-Rom");
-
-  } else if (pKey == '3') {
+  }
+  else if (pKey == '3')
+  {
     mSpline.setInterpolationType("Hermite");
-
-  } else if (pKey == 'A') {
+  }
+  else if (pKey == 'A')
+  {
     mMode = ADD;
-
-  } else if (pKey == 'D') {
+  }
+  else if (pKey == 'D')
+  {
     mMode = REMOVE;
-
-  } else if (pKey == 'E') {
+  }
+  else if (pKey == 'E')
+  {
     mMode = EDIT;
-
-  } else if (pKey == 'C') {
+  }
+  else if (pKey == 'C')
+  {
     mShowControlPoints = !mShowControlPoints;
-
-  } else if (pKey == GLFW_KEY_SPACE) {
+  }
+  else if (pKey == GLFW_KEY_SPACE)
+  {
     mSpline.clear();
-
-  } else if (pKey == 'H') {
+  }
+  else if (pKey == 'H')
+  {
     mHermite.setClamped(!mHermite.isClamped());
     mSpline.computeControlPoints();
-  } 
+  }
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-	CurveEditor viewer;
-	viewer.run();
+  CurveEditor viewer;
+  viewer.run();
 }

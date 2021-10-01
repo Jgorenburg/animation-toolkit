@@ -8,16 +8,16 @@
 #include "interpolator_linear.h"
 #include "interpolator_catmullrom.h"
 
-class CurveEditor : public atkui::Framework {
- public:
+class CurveEditor : public atkui::Framework
+{
+public:
   CurveEditor();
   virtual ~CurveEditor();
 
- protected:
-
+protected:
   virtual void setup();
   virtual void scene();
-  virtual void addPoint(const glm::vec3& p);
+  virtual void addPoint(const glm::vec3 &p);
   virtual void deletePoint(int key);
   virtual void drawState();
 
@@ -25,16 +25,22 @@ class CurveEditor : public atkui::Framework {
   virtual void mouseMotion(int x, int y, int dx, int dy);
   virtual void mouseUp(int button, int mods);
   virtual void mouseDown(int button, int mods);
-  virtual void keyUp(int key, int mods); 
+  virtual void keyUp(int key, int mods);
   virtual int pickPoint(int x, int y);
 
- protected:
+protected:
+  vec3 prevVal;
 
   int mRadius;
   int mSelected;
   int mButtonState;
 
-  enum Mode { ADD, EDIT, REMOVE } mMode;
+  enum Mode
+  {
+    ADD,
+    EDIT,
+    REMOVE
+  } mMode;
   bool mShowControlPoints;
 
   Spline mSpline;
