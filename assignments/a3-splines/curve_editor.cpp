@@ -60,15 +60,14 @@ void CurveEditor::scene()
     }
   }
 
-  if (mSpline.getNumControlPoints() > 0)
+  if (mSpline.getNumKeys() > 0)
   {
+    prevVal = mSpline.getValue(0);
     float minT = mSpline.getTime(0);
     float dur = mSpline.getDuration();
-    prevVal = mSpline.getValue(0);
 
-    for (int i = minT; i < minT + dur; i += 0.01f)
+    for (float i = minT; i < minT + dur; i += 0.01f)
     {
-      std::cout << i << std::endl;
       vec3 newVal = mSpline.getValue(i);
       drawLine(newVal, prevVal);
       prevVal = newVal;
@@ -224,7 +223,10 @@ void CurveEditor::mouseDown(int pButton, int state)
     else if (mMode == REMOVE)
     {
       mSelected = pickPoint(pX, height() - pY);
-      deletePoint(mSelected);
+      if (mSelected != -1 && !mShowControlPoints)
+      {
+        deletePoint(mSelected);
+      }
     }
     else if (mMode == EDIT)
     {

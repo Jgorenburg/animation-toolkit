@@ -132,11 +132,11 @@ glm::vec3 Spline::getValue(float t) const
   // compute the segment containing t
   // compute the value [0, 1] along the segment for interpolation
 
-  if (t < getTime(0))
+  if (t <= getTime(0))
   {
     return getKey(0);
   }
-  else if (t > getTime(getNumKeys() - 1))
+  else if (t >= getTime(getNumKeys() - 1))
   {
     return getKey(getNumKeys() - 1);
   }

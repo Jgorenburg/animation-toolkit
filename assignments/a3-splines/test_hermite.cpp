@@ -7,13 +7,18 @@ using namespace std;
 int main()
 {
    std::vector<vec3> keys;
-   keys.push_back(vec3(0,0,0));
-   keys.push_back(vec3(1,2,0));
-   keys.push_back(vec3(3,3,0));
-   keys.push_back(vec3(6,3,0));
-   keys.push_back(vec3(8,0,0));
+   keys.push_back(vec3(0, 0, 0));
+   keys.push_back(vec3(1, 2, 0));
+   keys.push_back(vec3(3, 3, 0));
+   keys.push_back(vec3(6, 3, 0));
+   keys.push_back(vec3(8, 0, 0));
 
    InterpolatorHermite hermite;
+   hermite.computeControlPoints(keys);
+
+   // test interpolation with clamped endpoints
+   hermite.setClamped(true);
+   hermite.setClampedDirection(vec3(1.0, 0.0, 0.0));
    hermite.computeControlPoints(keys);
 
    // todo: print the control points in hemite
@@ -22,11 +27,6 @@ int main()
    {
       std::cout << "control point: " << to_string(hermite.getControlPoint(i)) << std::endl;
    }
-
-   // test interpolation with clamped endpoints
-   hermite.setClamped(true);
-   hermite.setClampedDirection(vec3(1.0, 0.0, 0.0));
-   hermite.computeControlPoints(keys);
 
    vec3 value;
    value = hermite.interpolate(0, 0.0);
@@ -51,4 +51,3 @@ int main()
    value = hermite.interpolate(2, 0.5);
    std::cout << "(natural) interpolate(2, 0.5) = " << to_string(value) << std::endl;
 }
-

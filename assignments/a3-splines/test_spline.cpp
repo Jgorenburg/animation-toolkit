@@ -71,7 +71,7 @@ int main()
    std::cout << "Duration: " << spline.getDuration() << std::endl;
    std::cout << "getValue(1.5): " << to_string(test) << std::endl;
 
-      spline.setInterpolationType("Hermite");
+   spline.setInterpolationType("Hermite");
    test = spline.getValue(1.5);
    std::cout << "\n-------------------------------\n";
    std::cout << "Current interpolation type: " << spline.getInterpolationType() << std::endl;
