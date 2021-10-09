@@ -6,13 +6,15 @@
 #include <vector>
 #include <sstream>
 #include <string>
+#include "atkmath/vector3.h"
 
+using namespace atkmath;
 
-template<class T>
-void EXPECT_FLOAT_VALUES(T a, const std::vector<T>& bs)
+template <class T>
+void EXPECT_FLOAT_VALUES(T a, const std::vector<T> &bs)
 {
     bool ok = false;
-  std::ostringstream stream;
+    std::ostringstream stream;
     for (int i = 0; i < bs.size() && !ok; i++)
     {
         if (std::abs(a - bs[i]) < 0.0001f)
@@ -30,11 +32,12 @@ void EXPECT_FLOAT_VALUES(T a, const std::vector<T>& bs)
         std::cout << "  " << a << std::endl;
         std::cout << "  " << stream.str() << std::endl;
     }
-    else std::cout << "  TEST SUCCESS\n";
+    else
+        std::cout << "  TEST SUCCESS\n";
 }
 
-template<class T>
-void EXPECT_VALUES(T a, const std::vector<T>& bs)
+template <class T>
+void EXPECT_VALUES(T a, const std::vector<T> &bs)
 {
     bool ok = false;
     std::ostringstream stream;
@@ -56,10 +59,11 @@ void EXPECT_VALUES(T a, const std::vector<T>& bs)
         std::cout << "  " << a << std::endl;
         std::cout << "  " << stream.str() << std::endl;
     }
-    else std::cout << "  TEST SUCCESS\n";
+    else
+        std::cout << "  TEST SUCCESS\n";
 }
 
-template<class T>
+template <class T>
 void EXPECT_FLOAT_EQ(T a, T b)
 {
     if (std::abs(a - b) > 0.0001f)
@@ -68,10 +72,11 @@ void EXPECT_FLOAT_EQ(T a, T b)
         std::cout << "  " << a << std::endl;
         std::cout << "  " << b << std::endl;
     }
-    else std::cout << "  TEST SUCCESS\n";
+    else
+        std::cout << "  TEST SUCCESS\n";
 }
 
-template<class T>
+template <class T>
 void EXPECT_FLOAT_EQ(T a, T b, float threshold)
 {
     if (std::abs(a - b) > threshold)
@@ -80,22 +85,27 @@ void EXPECT_FLOAT_EQ(T a, T b, float threshold)
         std::cout << "  " << a << std::endl;
         std::cout << "  " << b << std::endl;
     }
-    else std::cout << "  TEST SUCCESS\n";
+    else
+        std::cout << "  TEST SUCCESS\n";
 }
 
-template<class T>
-void EXPECT_EQ(T a, T b)
+template <class T>
+void EXPECT_EQ(T a, T b, Vector3 vec = Vector3())
 {
     if (a != b)
     {
         std::cout << "  TEST FAIL\n";
+        std::cout << "  " << vec << std::endl
+                  << std::endl;
         std::cout << "  " << a << std::endl;
         std::cout << "  " << b << std::endl;
     }
-    else std::cout << "  TEST SUCCESS\n";
+    else
+        std::cout << "  TEST SUCCESS\n";
 }
 
-#define RUN_TEST(name) std::cout << #name << std::endl; name;
+#define RUN_TEST(name)               \
+    std::cout << #name << std::endl; \
+    name;
 
 #endif
-

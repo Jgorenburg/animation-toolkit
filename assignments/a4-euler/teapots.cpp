@@ -10,76 +10,80 @@
 #include <algorithm>
 #include <iostream>
 
-using glm::vec3;
 using atkmath::Deg2Rad;
-using atkmath::Rad2Deg;
 using atkmath::Matrix3;
-using atkmath::Vector3;
 using atkmath::Quaternion;
+using atkmath::Rad2Deg;
+using atkmath::Vector3;
+using glm::vec3;
 
-TeapotsViewer::TeapotsViewer() : atkui::Framework(atkui::Orthographic), 
-	mRotOrder(XYZ),
-	mXAngle(50), mYAngle(0), mZAngle(0) {
+TeapotsViewer::TeapotsViewer() : atkui::Framework(atkui::Orthographic),
+                                 mRotOrder(XYZ),
+                                 mXAngle(50), mYAngle(0), mZAngle(0)
+{
 }
 
-void TeapotsViewer::scene() {
+void TeapotsViewer::scene()
+{
   renderer.beginShader("phong");
   renderer.ortho(-5, 5, -5, 5, 0.01, 100);
   renderer.lookAt(vec3(0, 0, -10), vec3(0, 0, 0), vec3(0, 1, 0));
   teapots();
   renderer.endShader();
 
-  drawText("Euler to matrix", width()*0.675, height()*0.675+50); // top, right
-  drawText("YXZ", width()*0.5, height()*0.675+50); // top, middle
-  drawText("ZYX", width()*0.325, height()*0.675+50); // top, left
+  drawText("Euler to matrix", width() * 0.675, height() * 0.675 + 50); // top, right
+  drawText("YXZ", width() * 0.5, height() * 0.675 + 50);               // top, middle
+  drawText("ZYX", width() * 0.325, height() * 0.675 + 50);             // top, left
 
-  drawText("XYZ", width()*0.675, height()*0.5+50); // middle, right
-  drawText("YZX", width()*0.5, height()*0.5+50); // center
-  drawText("Quat", width()*0.325, height()*0.5+50); // middle, left
+  drawText("XYZ", width() * 0.675, height() * 0.5 + 50);  // middle, right
+  drawText("YZX", width() * 0.5, height() * 0.5 + 50);    // center
+  drawText("Quat", width() * 0.325, height() * 0.5 + 50); // middle, left
 
-  drawText("XZY", width()*0.675, height()*0.325+50); // middle, right
-  drawText("ZXY", width()*0.5, height()*0.325+50); // center
-  drawText("Quat to Matrix", width()*0.325, height()*0.325+50); // middle, left
+  drawText("XZY", width() * 0.675, height() * 0.325 + 50);            // middle, right
+  drawText("ZXY", width() * 0.5, height() * 0.325 + 50);              // center
+  drawText("Quat to Matrix", width() * 0.325, height() * 0.325 + 50); // middle, left
 
   runGui();
 }
 
-void TeapotsViewer::drawText(const std::string& text, float x, float y) {
-  x = x - renderer.textWidth(text)*0.5;
+void TeapotsViewer::drawText(const std::string &text, float x, float y)
+{
+  x = x - renderer.textWidth(text) * 0.5;
   y = height() - y;
   renderer.text(text, x, y);
 }
 
-void TeapotsViewer::pushEulerRotation(TeapotsViewer::RotOrder roo, const Vector3& euler) {
+void TeapotsViewer::pushEulerRotation(TeapotsViewer::RotOrder roo, const Vector3 &euler)
+{
   Vector3 anglesRad = euler * Deg2Rad;
   switch (roo)
   {
-  case XYZ: 
+  case XYZ:
     rotate(anglesRad[0], vec3(1, 0, 0));
     rotate(anglesRad[1], vec3(0, 1, 0));
     rotate(anglesRad[2], vec3(0, 0, 1));
     break;
-  case XZY: 
+  case XZY:
     rotate(anglesRad[0], vec3(1, 0, 0));
     rotate(anglesRad[2], vec3(0, 0, 1));
     rotate(anglesRad[1], vec3(0, 1, 0));
     break;
-  case YXZ: 
+  case YXZ:
     rotate(anglesRad[1], vec3(0, 1, 0));
     rotate(anglesRad[0], vec3(1, 0, 0));
     rotate(anglesRad[2], vec3(0, 0, 1));
     break;
-  case YZX: 
+  case YZX:
     rotate(anglesRad[1], vec3(0, 1, 0));
     rotate(anglesRad[2], vec3(0, 0, 1));
     rotate(anglesRad[0], vec3(1, 0, 0));
     break;
-  case ZXY: 
+  case ZXY:
     rotate(anglesRad[2], vec3(0, 0, 1));
     rotate(anglesRad[0], vec3(1, 0, 0));
     rotate(anglesRad[1], vec3(0, 1, 0));
     break;
-  case ZYX: 
+  case ZYX:
     rotate(anglesRad[2], vec3(0, 0, 1));
     rotate(anglesRad[1], vec3(0, 1, 0));
     rotate(anglesRad[0], vec3(1, 0, 0));
@@ -94,12 +98,24 @@ void TeapotsViewer::teapots()
   Vector3 euler(mXAngle, mYAngle, mZAngle);
   switch (mRotOrder)
   {
-  case XYZ: rot.fromEulerAnglesXYZ(euler*Deg2Rad); break;
-  case XZY: rot.fromEulerAnglesXZY(euler*Deg2Rad); break;
-  case YXZ: rot.fromEulerAnglesYXZ(euler*Deg2Rad); break;
-  case YZX: rot.fromEulerAnglesYZX(euler*Deg2Rad); break;
-  case ZXY: rot.fromEulerAnglesZXY(euler*Deg2Rad); break;
-  case ZYX: rot.fromEulerAnglesZYX(euler*Deg2Rad); break;
+  case XYZ:
+    rot.fromEulerAnglesXYZ(euler * Deg2Rad);
+    break;
+  case XZY:
+    rot.fromEulerAnglesXZY(euler * Deg2Rad);
+    break;
+  case YXZ:
+    rot.fromEulerAnglesYXZ(euler * Deg2Rad);
+    break;
+  case YZX:
+    rot.fromEulerAnglesYZX(euler * Deg2Rad);
+    break;
+  case ZXY:
+    rot.fromEulerAnglesZXY(euler * Deg2Rad);
+    break;
+  case ZYX:
+    rot.fromEulerAnglesZYX(euler * Deg2Rad);
+    break;
   }
 
   glm::mat4 rotm = rot.writeToMat4();
@@ -121,7 +137,8 @@ void TeapotsViewer::teapots()
 
   Quaternion quat;
   quat.fromMatrix(rot);
-  Vector3 axis(1,0,0); double angle = 0;
+  Vector3 axis(1, 0, 0);
+  double angle = 0;
   quat.toAxisAngle(axis, angle);
 
   Matrix3 qmat = quat.toMatrix();
@@ -143,7 +160,7 @@ void TeapotsViewer::teapots()
   transform(rotm);
   drawTeapot(vec3(0), size);
   pop();
-  
+
   // TEST CONVERTING matrix to EULER XYZ
   setColor(vec3(0, 0.5, 1));
   push();
@@ -194,17 +211,17 @@ void TeapotsViewer::teapots()
   rotate(angle, vec3(axis[0], axis[1], axis[2]));
   drawTeapot(vec3(0), size);
   pop();
-  
+
   // TEST CONVERTING quaternion to matrix
   push();
   translate(vec3(1.75, -1.75, 0));
   transform(qglm);
   drawTeapot(vec3(0), size);
   pop();
-
 }
 
-void TeapotsViewer::setup() {
+void TeapotsViewer::setup()
+{
   setWindowSize(800, 800);
   background(vec3(0));
   setCameraEnabled(false);
@@ -216,25 +233,27 @@ void TeapotsViewer::setup() {
 
 #if defined(__APPLE__)
   // GL 3.2 + GLSL 150
-  const char* glsl_version = "#version 150";
+  const char *glsl_version = "#version 150";
 #else
   // GL 3.0 + GLSL 130
-  const char* glsl_version = "#version 130";
+  const char *glsl_version = "#version 130";
 #endif
   // Setup Platform/Renderer backends
   ImGui_ImplGlfw_InitForOpenGL(window(), true);
   ImGui_ImplOpenGL3_Init(glsl_version);
 }
 
-TeapotsViewer::~TeapotsViewer() {
+TeapotsViewer::~TeapotsViewer()
+{
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
 }
 
-void TeapotsViewer::runGui() {
+void TeapotsViewer::runGui()
+{
 
-  static const char* mGuiRoo[] = { "XYZ", "XZY", "YXZ", "YZX", "ZXY", "ZYX" };
+  static const char *mGuiRoo[] = {"XYZ", "XZY", "YXZ", "YZX", "ZXY", "ZYX"};
 
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -246,7 +265,7 @@ void TeapotsViewer::runGui() {
   ImGui::SliderFloat("X Rotation", &mXAngle, 0.0f, 360.0f);
   ImGui::SliderFloat("Y Rotation", &mYAngle, 0.0f, 360.0f);
   ImGui::SliderFloat("Z Rotation", &mZAngle, 0.0f, 360.0f);
-  ImGui::Combo("Rotation Order", (int*) &mRotOrder, mGuiRoo, 6);
+  ImGui::Combo("Rotation Order", (int *)&mRotOrder, mGuiRoo, 6);
   ImGui::End();
 
   // Rendering
@@ -254,7 +273,8 @@ void TeapotsViewer::runGui() {
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv)
+{
   TeapotsViewer teapots;
   teapots.run();
 }
