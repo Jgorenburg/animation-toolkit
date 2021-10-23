@@ -1,4 +1,4 @@
-set(LIBS atkmath ${LIBS})
+set(LIBS atkmath imgui ${LIBS})
 
 add_executable(a5-unique unique.cpp)
 target_link_libraries(a5-unique ${LIBS})
