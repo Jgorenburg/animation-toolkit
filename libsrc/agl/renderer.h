@@ -289,6 +289,11 @@ class Renderer {
   /**
    * @copydoc setUniform(const std::string&,float,float,float)
    */
+  void setUniform(const std::string& name, const std::vector<glm::mat4> &ms);
+
+  /**
+   * @copydoc setUniform(const std::string&,float,float,float)
+   */
   void setUniform(const std::string& name, float val);
 
   /**
@@ -667,6 +672,9 @@ class Renderer {
   int _fontNormal;
   unsigned int _fontColor;
   float _fontSize;
+
+ public:
+  static int PrimitiveSubdivision;
 };
 
 }  // namespace agl
