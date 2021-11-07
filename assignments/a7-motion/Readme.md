@@ -18,5 +18,7 @@ My butterfly flies in a circle along the x and y axes. Call main with the argume
 
 ![](/assignments/a7-motion/boxer.gif)
 
+![](/assignments/a7-motion/boxer2.gif)
+
 I modified the backflip-then-uppercut motion to jump 10 times higher and then enlarge his arm when performing the final punch.
 
