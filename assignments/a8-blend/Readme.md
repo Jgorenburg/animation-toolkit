@@ -1,7 +1,6 @@
-# Readme
+# Unique
 
-TODO: Replace this text with
+![](/assignments/a8-blend/zombieChase.gif)
 
-* images, gifs, videos
-* brief description of what each image/gif/video shows
+I made a zombie chase a civilian whose hands are waving wildly in the air.
 
