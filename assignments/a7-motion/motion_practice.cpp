@@ -38,7 +38,7 @@ int main(int argc, char **argv)
    Joint *hand = skeleton.getByName("Beta:LeftHand");
    int handID = hand->getID();
    glm::quat rot = frame5.jointRots.at(handID);
-   vec3 eulerXYZ = extractEulerAngleRO(XYZ, glm::mat4_cast(rot));
+   vec3 eulerXYZ = extractEulerAngleRO(XYZ, glm::mat3_cast(rot));
    std::cout << "The local rotation of the left hand on frame 5 is: " << glm::to_string(eulerXYZ) << std::endl;
 
    // What is the speed of the character?

@@ -50,18 +50,18 @@ public:
 
     // todo tail
     push();
-    translate(-tail.pivot);
-    rotate(tail.rotation, vec3(0, 0, 1));
     translate(-body.pivot);
+    rotate(tail.rotation, vec3(0, 0, 1));
+    translate(-tail.pivot);
     translate(vec3(0, 0, -6));
     drawSprite(tail);
     pop();
 
     // arm1
     push();
-    translate(-arm1.pivot);
-    rotate(arm1.rotation, vec3(0, 0, 1));
     translate(-body.pivot);
+    rotate(arm1.rotation, vec3(0, 0, 1));
+    translate(-arm1.pivot);
     translate(vec3(0, 0, -5));
     drawSprite(arm1);
     pop();
