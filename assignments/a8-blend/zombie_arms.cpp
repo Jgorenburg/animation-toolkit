@@ -48,19 +48,17 @@ public:
          int IDrightArm = rightArm->getID();
          int IDrightElbow = rightElbow->getID();
 
-         quat leftOffset = leftLocalRot * leftArm->getLocalRotation();
-         quat rightOffset = rightLocalRot * rightArm->getLocalRotation();
-
-         std::cout << leftLocalRot << "    " << leftOffset << std::endl;
+         quat leftOffset = leftLocalRot * inverse(leftArm->getLocalRotation());
+         quat rightOffset = rightLocalRot * inverse(rightArm->getLocalRotation());
 
          newPose.jointRots.erase(newPose.jointRots.begin() + IDleftArm);
-         newPose.jointRots.insert(newPose.jointRots.begin() + IDleftArm, leftOffset);
+         newPose.jointRots.insert(newPose.jointRots.begin() + IDleftArm, newPose.jointRots.at(IDleftArm) * leftOffset);
 
          newPose.jointRots.erase(newPose.jointRots.begin() + IDleftElbow);
          newPose.jointRots.insert(newPose.jointRots.begin() + IDleftElbow, elbowLocalRot);
 
          newPose.jointRots.erase(newPose.jointRots.begin() + IDrightArm);
-         newPose.jointRots.insert(newPose.jointRots.begin() + IDrightArm, rightOffset);
+         newPose.jointRots.insert(newPose.jointRots.begin() + IDrightArm, newPose.jointRots.at(IDrightArm) * rightOffset);
 
          newPose.jointRots.erase(newPose.jointRots.begin() + IDrightElbow);
          newPose.jointRots.insert(newPose.jointRots.begin() + IDrightElbow, elbowLocalRot);
