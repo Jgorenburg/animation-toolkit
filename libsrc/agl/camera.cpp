@@ -79,10 +79,11 @@ void Camera::set(const vec3& eyepos, const vec3& look, const vec3& up) {
 
 void Camera::_set(const vec3& eyepos, const vec3& look, const vec3& up) {
   mEye = eyepos;
-  mN = eyepos - look;
+  mLook = look;
+  mN = normalize(eyepos - look);
   mV = cross(up, mN);
   mU = cross(mN, mV);
-  mRadius = length(mN);  // cache this distance
+  mRadius = distance(eyepos, look);  // cache this distance
 
   mU = normalize(mU);
   mV = normalize(mV);
@@ -225,14 +226,14 @@ float Camera::moveSpeed() const {
 
 void Camera::onMouseMotion(int pX, int pY) {
   // https://www.glfw.org/docs/latest/input_guide.html
-  if (mModifierState != GLFW_PRESS) return;
+  if (mActionState != GLFW_PRESS) return;
 
   int deltaX = mLastX - pX;
   int deltaY = mLastY - pY;
   bool moveLeftRight = abs(deltaX) > abs(deltaY);
   bool moveUpDown = !moveLeftRight;
 
-  if (mButtonState == GLFW_MOUSE_BUTTON_LEFT) {  // Rotate
+  if (mButtonState == GLFW_MOUSE_BUTTON_LEFT && mModifierState == 0x0) {  // Rotate
     if (moveLeftRight && deltaX > 0) orbitLeft(deltaX);
     else if (moveLeftRight && deltaX < 0) orbitRight(-deltaX);
     else if (moveUpDown && deltaY > 0) orbitUp(deltaY);
@@ -253,9 +254,10 @@ void Camera::onMouseMotion(int pX, int pY) {
   mLastY = pY;
 }
 
-void Camera::onMouseButton(int pButton, int pState, int x, int y) {
+void Camera::onMouseButton(int pButton, int pState, int x, int y, int mods) {
   mButtonState = pButton;
-  mModifierState = pState;
+  mActionState = pState;
+  mModifierState = mods;
   mLastX = x;
   mLastY = y;
 }
@@ -271,6 +273,6 @@ void Camera::onScroll(float dx, float dy) {
 void Camera::onKeyboard(int pKey, int scancode, int action, int mods) {
   if (pKey == ' ') {
     reset();
-  }
+  } 
 }
 }  // namespace agl
