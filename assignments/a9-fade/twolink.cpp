@@ -14,7 +14,7 @@ using namespace glm;
 
 class AIKSimple : public atkui::Framework
 {
- public:
+public:
   AIKSimple() : atkui::Framework(atkui::Perspective),
                 mDrawer(),
                 mGoalPosition()
@@ -75,7 +75,8 @@ class AIKSimple : public atkui::Framework
     ImGui::SliderFloat("X", &mGoalPosition[0], -500.0f, 500.0f);
     ImGui::SliderFloat("Y", &mGoalPosition[1], -500.0f, 500.0f);
     ImGui::SliderFloat("Z", &mGoalPosition[2], -500.0f, 500.0f);
-    if (ImGui::Button("Reset")) reset();
+    if (ImGui::Button("Reset"))
+      reset();
     ImGui::End();
 
     // Rendering
@@ -127,9 +128,29 @@ class AIKSimple : public atkui::Framework
   void solveIKTwoLink(Skeleton &skeleton, const vec3 &goalPosition)
   {
     // todo: implement two link IK algorithm
+    Joint *s = mActor.getByName("Shoulder");
+    Joint *e = mActor.getByName("Elbow");
+    Joint *w = mActor.getByName("Wrist");
+    float l1 = length(e->getLocalTranslation());
+    float l2 = length(w->getLocalTranslation());
+    float dist = min(length(goalPosition - s->getLocalTranslation()), l1 + l2);
+
+    float ang2 = acos((pow(dist, 2.0f) - pow(l1, 2.0f) - pow(l2, 2.0f)) / (-2 * l1 * l2)) - M_PI;
+    float ang1 = asin(-l2 * sin(ang2) / dist);
+    // s->setLocalRotation(angleAxis(ang1, vec3(0, 1, 0)));
+    // e->setLocalRotation(angleAxis(ang2, vec3(0, 1, 0)));
+
+    mActor.fk();
+    vec3 dest = goalPosition;
+    float beta = atan2(-dest[2], dest[0]);
+    float gamma = asin(dest[1] / dist);
+    e->setLocalRotation(eulerAngleZ(ang2));
+    s->setLocalRotation(eulerAngleY(beta) * eulerAngleZ(gamma) * eulerAngleZ(ang1));
+    // std::cout << "s: " << s->getGlobalRotation() << "   e: " << e->getLocalRotation() << std::endl;
+    mActor.fk();
   }
 
- private:
+private:
   atk::Skeleton mActor;
   atkui::SkeletonDrawer mDrawer;
   glm::vec3 mGoalPosition;

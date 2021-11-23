@@ -18,6 +18,8 @@ public:
     BVHReader reader;
     reader.load("../motions/Beta/walking.bvh", _skeleton, _walk);
     _drawer.showAxes = true;
+
+    pos = _walk.getKey(0).rootPos;
   }
 
   virtual void scene()
@@ -27,13 +29,15 @@ public:
 
     // draw heading
     vec3 p = _skeleton.getRoot()->getGlobalTranslation();
+    std::cout << p << std::endl;
+
     p[1] = 10; // set height close above the floor
 
     setColor(vec3(0, 1, 1));
     push();
     translate(p);
     rotate(_heading, vec3(0, 1, 0));
-    translate(vec3(0,0,25));
+    translate(vec3(0, 0, 25));
     scale(vec3(10, 10, 50));
     drawCylinder(vec3(0), 1.0f);
     pop();
@@ -45,12 +49,30 @@ public:
 
     // TODO: Your code here
 
-    // TODO: Override the default camera to follow the character
+    vec3 curTrans = _skeleton.getRoot()->getGlobalTranslation();
+    glm::quat curRot = _skeleton.getRoot()->getGlobalRotation();
+    _skeleton.getRoot()->setLocalRotation(curRot * angleAxis(_heading, vec3(0, 1, 0)));
+    move += angleAxis(_heading, vec3(0, 1, 0)) * vec3(0, 0, 1);
+    _skeleton.getRoot()->setLocalTranslation(curTrans * vec3(0, 1, 0) + move);
+    _skeleton.fk();
+    // std::cout << _skeleton.getRoot()->getGlobalTranslation() << std::endl;
+    //  TODO: Override the default camera to follow the character
     // lookAt(pos, look, vec3(0, 1, 0));
 
+    Joint *_head = _skeleton.getByName("Beta:Head");
+    vec3 globalPos, globalLookPos;
+    globalPos = _head->getGlobalTranslation();
+    globalLookPos = globalPos + _head->getGlobalRotation() * vec3(0, 50, -150);
+    // globalLookPos = vec3(0, 10, 1000);
+    //  std::cout << _head->getGlobalRotation() * vec3(0, 0, -10) << std::endl;
+
+    lookAt(globalLookPos, globalPos, vec3(0, 1, 0));
+
     // update heading when key is down
-    if (keyIsDown('D')) _heading -= 0.05;
-    if (keyIsDown('A')) _heading += 0.05;
+    if (keyIsDown('D'))
+      _heading -= 0.05;
+    if (keyIsDown('A'))
+      _heading += 0.05;
   }
 
 protected:
@@ -59,6 +81,7 @@ protected:
   Motion _walk;
   Skeleton _skeleton;
   atkui::SkeletonDrawer _drawer;
+  vec3 pos, move = vec3(0);
 };
 
 int main(int argc, char **argv)

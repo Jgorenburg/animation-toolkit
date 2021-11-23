@@ -38,6 +38,47 @@ public:
     int start2 = 0;
 
     // TODO: Your code here
+    blend_ = motion1_;
+    reorient(start1);
+    fade(numBlendFrames, start1, start2);
+    append(numBlendFrames);
+  }
+
+  void reorient(int sloc)
+  {
+    Pose startPose = motion1_.getKey(motion1_.getNumKeys() - 1);
+    vec3 pos = startPose.rootPos - motion2_.getKey(0).rootPos;
+    glm::quat rotate = startPose.jointRots[0];
+
+    for (int i = 0; i < motion2_.getNumKeys(); i++)
+    {
+      Pose newPose = motion2_.getKey(i);
+      newPose.rootPos = rotate * newPose.rootPos + pos;
+      newPose.jointRots.at(0) = newPose.jointRots.at(0) * rotate;
+      motion2_.editKey(i, newPose);
+    }
+  }
+
+  void fade(int offset, int s1, int s2)
+  {
+    float inc = 1.0f / offset;
+    for (float i = 0; i < 1; i += inc)
+    {
+      Pose m1 = motion1_.getKey(s1);
+      Pose m2 = motion2_.getKey(s2);
+      Pose blendedPose = Pose::Lerp(m1, m2, i);
+      blend_.editKey(s1, blendedPose);
+      s1++;
+      s2++;
+    }
+  }
+
+  void append(int offset)
+  {
+    for (int i = offset; i < motion2_.getNumKeys(); i++)
+    {
+      blend_.appendKey(motion2_.getKey(i));
+    }
   }
 
   void save(const std::string &filename)
@@ -48,6 +89,7 @@ public:
 
   void scene()
   {
+
     blend_.update(skeleton_, elapsedTime());
     drawer_.draw(skeleton_, *this);
   }
@@ -100,5 +142,6 @@ int main(int argc, char **argv)
   viewer.save(saveName);
 
   viewer.run();
+
   return 0;
 }
