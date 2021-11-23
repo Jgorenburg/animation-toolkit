@@ -1,7 +1,7 @@
 # Readme
 
-TODO: Replace this text with
+## Unique Work
 
-* images, gifs, videos
-* brief description of what each image/gif/video shows
+![](/assignments/a9-fade/manyTwoLinks.gif)
 
+My unique project is four two-link chains that mirror each other. When the target location is moved, each chain get's it's own target to aim towards, which come in two pairs of opposite locations.
