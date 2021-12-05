@@ -14,6 +14,9 @@ Helpful Links:
 * [Assignment 06: Building character](https://brynmawr-cs317-f21.github.io/website/asst06-transform.html)
 * [Assignment 07: A commotion of motion](https://brynmawr-cs317-f21.github.io/website/asst07-motion.html)
 * [Assignment 08: Blending in](https://brynmawr-cs317-f21.github.io/website/asst08-blend.html)
+* [Assignment 09: Cross-fade away](https://brynmawr-cs317-f21.github.io/website/asst09-fade.html)
+* [Assignment 10: Reach for your goals](https://brynmawr-cs317-f21.github.io/website/asst10-ik.html)
+* [Assignment 11: Steering and crowds](https://brynmawr-cs317-f21.github.io/website/asst11-steering.html)
 
 # Tools and dependencies
 
